@@ -1,0 +1,62 @@
+import requests
+import datetime
+import openpyxl as opx
+import tkinter as tk
+from tkinter import messagebox
+
+# Nome do arquivo da planilha
+arquivo_excel = "historico.xlsx"
+
+# Função para coletar e salvar os dados
+def coletar_dados():
+    try:
+        # Abrindo a planilha
+        planilha = opx.load_workbook(arquivo_excel)
+        dados_page = planilha["dados"]
+
+        # Parametrização da API
+        API_KEY = "0bd9feecaf199a4ab2e4ce014d1f2ea4"
+        cidade = "São Paulo"
+        link = f"https://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={API_KEY}&lang=pt_br"
+
+        # Requisição dos dados
+        requisicao = requests.get(link)
+        requisicao_dic = requisicao.json()
+        humidade = requisicao_dic["main"]["humidity"]
+        temperatura = requisicao_dic["main"]["temp"] - 273.15  # Convertendo para Celsius
+        timestamp = requisicao_dic["dt"]
+        data_hora = datetime.datetime.fromtimestamp(timestamp)
+
+        # Encontrando a próxima linha vazia corretamente
+        ultima_linha = 2
+        for row in dados_page.iter_rows(min_row=2, max_row=dados_page.max_row, max_col=1):
+            if row[0].value is not None:
+                ultima_linha += 1
+            else:
+                break
+
+        # Inserindo os dados na planilha
+        dados_page.cell(row=ultima_linha, column=1, value=data_hora.strftime('%d/%m/%Y %H:%M:%S'))
+        dados_page.cell(row=ultima_linha, column=2, value=temperatura)
+        dados_page.cell(row=ultima_linha, column=3, value=humidade)
+
+        # Salvando a planilha
+        planilha.save(arquivo_excel)
+
+        # Exibindo mensagem de sucesso
+        messagebox.showinfo("Sucesso!", "Dados coletados e salvos com sucesso!")
+    except Exception as e:
+        messagebox.showerror("Erro", f"Erro ao coletar os dados: {e}")
+
+# Criando a interface Tkinter
+janela = tk.Tk()
+janela.title("Coletar Temperatura")
+janela.geometry("300x200")  # Tamanho da janela
+
+# Criando o botão
+botao = tk.Button(janela, text="Coletar Dados", command=coletar_dados, font=("Arial", 14), bg="lightblue")
+botao.pack(pady=50)  # Posicionamento
+
+# Rodando a interface
+janela.mainloop()
+ 
