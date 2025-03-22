@@ -1,0 +1,24 @@
+📌 Como Usar o Código  
+
+1️⃣ Instale as dependências** necessárias antes de rodar o código. No terminal ou prompt de comando, digite:  
+   - pip install requests openpyxl
+ 
+
+2️⃣ Configure a API Key  
+   - Substitua a variável `API_KEY` no código pela sua própria chave da API OpenWeather.  
+   - Se ainda não tem uma, cadastre-se gratuitamente em [OpenWeather](https://openweathermap.org/api) e obtenha sua chave.  
+
+3️⃣ Execute o script 
+No terminal, vá até a pasta onde o arquivo Python está salvo e digite:
+- python script.py 
+
+Isso abrirá uma janela com um botão "Coletar Dados".  
+
+4️⃣ Coletando os dados
+   - Clique no botão para buscar as informações de temperatura e umidade da cidade de São Paulo.  
+   - Os dados serão automaticamente armazenados na planilha **historico.xlsx**.  
+
+5️⃣ Verificando os dados 
+   - Abra o arquivo **historico.xlsx** no Excel ou em outro editor de planilhas para visualizar as informações salvas.  
+
+💡 Dica: Você pode modificar o código para coletar dados de outras cidades, basta alterar a variável `cidade`! 🌎
